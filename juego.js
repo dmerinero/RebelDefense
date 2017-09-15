@@ -1,6 +1,9 @@
 //OBTENEMOS EL CANVAS Y EL CONTEXT (USADO PARA DIBUJAR)
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
+//Setting the scale to the actual screen
+ctx.canvas.width  = window.innerWidth;
+ctx.canvas.height = window.innerHeight;
 
 //OBJETOS
 var jugador = {
