@@ -26,7 +26,39 @@ function bucle() {
 	//Moving the player
 	actualizarJugador();
 	//Drawing the player
+	preShake(); //It will only shake when we call "startShake()"
 	dibujarJugador();
+	postShake();
+
 
 	//Create the upper functions for the other objects we create
+}
+
+
+//Functions from google to shake the screen when a shoot is done
+var shakeDuration = 200;
+var shakeStartTime = -1;
+
+function preShake() {
+  if (shakeStartTime ==-1) return;
+  var dt = Date.now()-shakeStartTime;
+  if (dt>shakeDuration) {
+      shakeStartTime = -1; 
+      return;
+  }
+  var easingCoef = dt / shakeDuration;
+  var easing = Math.pow(easingCoef-1,3) +1;
+  ctx.save();  
+  var dx = easing*(Math.cos(dt*0.1 ) + Math.cos( dt *0.3115))*2;
+  var dy = easing*(Math.sin(dt*0.05) + Math.sin(dt*0.057113))*2;
+  ctx.translate(dx, dy);  
+}
+
+function postShake() {
+  if (shakeStartTime ==-1) return;
+  ctx.restore();
+}
+
+function startShake() {
+   shakeStartTime=Date.now();
 }

@@ -18,6 +18,7 @@ function keyDownHandler(e) {
 		teclado.izquierda = true;
 	} else if (e.keyCode == teclado.espacio_code) {
 		teclado.espacio = true;
+		startShake();
 	}
 }
 
