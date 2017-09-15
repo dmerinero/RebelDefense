@@ -66,6 +66,7 @@ function disparar(){
 	var tiempoActual = new Date().valueOf();
 	if(jugador.tiempoUltimoDisparo === null || (tiempoActual - jugador.tiempoUltimoDisparo) > (jugador.frecuenciaDisparo)){
 		var nuevoDisparo = new disparo(jugador.x, jugador.y); //We create a new bullet object 
+		nuevoDisparo.sonido.play();
 		jugador.disparos.push(nuevoDisparo); //We add the bullet to the array
 		teclado.espacio = false;
 		jugador.tiempoUltimoDisparo = tiempoActual; //We update the time

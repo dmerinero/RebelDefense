@@ -3,9 +3,10 @@ function disparo(x, y) {
 	this.y = y;
 	this.ancho= 10;
 	this.alto= 10;
-	this.color= colors[Math.floor(Math.random() * 7)]; //Get a random color
 
+	this.color= colors[Math.floor(Math.random() * 7)]; //Get a random color
 	this.velocidad= 5;
+	this.sonido = new sound("./sounds/disparo.wav");
 
 	//This function moves the bullet
 	this.actualizarDisparo = function() {
