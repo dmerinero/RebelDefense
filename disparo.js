@@ -1,5 +1,5 @@
 function disparo(x, y) {
-	this.x = x;
+	this.x = x + 20;
 	this.y = y;
 	this.ancho= 10;
 	this.alto= 10;

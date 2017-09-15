@@ -12,6 +12,7 @@ var jugador = {
 
 	//shots variables
 	tiempoUltimoDisparo: null,
+	frecuenciaDisparo: 2,
 	disparos: []
 };
 
@@ -30,9 +31,7 @@ function actualizarJugador(){
 		jugador.x -= jugador.velocidad;
 	} 
 	if(teclado.espacio) {
-		var nuevoDisparo = new disparo(jugador.x, jugador.y);
-		jugador.disparos.push(nuevoDisparo);
-		teclado.espacio = false;
+		disparar();
 	}
 	//EVITAR QUE JUGADOR SALGA DE LA PANTALLA
 	var limite_izquierda = jugador.margenLateral;
@@ -56,5 +55,15 @@ function dibujarJugador(){
 			delete jugador.disparos[j];
 			jugador.disparos.splice(j, 1);
 		}
+	}
+}
+
+function disparar(){
+	var tiempoActual = new Date().valueOf();
+	if(jugador.tiempoUltimoDisparo === null || (tiempoActual - jugador.tiempoUltimoDisparo) > (1000 / jugador.frecuenciaDisparo)){
+		var nuevoDisparo = new disparo(jugador.x, jugador.y);
+		jugador.disparos.push(nuevoDisparo);
+		teclado.espacio = false;
+		jugador.tiempoUltimoDisparo = tiempoActual;
 	}
 }
