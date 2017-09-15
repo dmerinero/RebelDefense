@@ -5,11 +5,7 @@ var ctx = canvas.getContext("2d");
 ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
-
-//TECLADO
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-
+var colors = ["green", "yellow", "pink", "white", "blue", "orange"];
 
 //FUNCIONES
 inicializar();
