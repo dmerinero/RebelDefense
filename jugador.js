@@ -10,9 +10,9 @@ var jugador = {
 	limite_izquierda: 20,
 	limite_derecha: 0,
 
-	//shots variables
+	//bullet variables
 	tiempoUltimoDisparo: null,
-	frecuenciaDisparo: 2,
+	frecuenciaDisparo: 250,
 	disparos: []
 };
 
@@ -47,10 +47,13 @@ function dibujarJugador(){
 	ctx.fillStyle = "red";
 	ctx.fillRect(jugador.x, jugador.y, jugador.ancho, jugador.alto);
 
+	//Update all the bullets we have shot
 	for(var j=0; j<jugador.disparos.length; j++){
 		var disparo = jugador.disparos[j];
 		disparo.actualizarDisparo();
 		disparo.dibujarDisparo();
+		
+		//If the bullet position is out of the screen destroy the bullet
 		if(disparo.y <= 0){
 			delete jugador.disparos[j];
 			jugador.disparos.splice(j, 1);
@@ -58,12 +61,13 @@ function dibujarJugador(){
 	}
 }
 
+//This will add a bullet when the time defined as "frecuenciaDisparo" has passed or when we have never shot before
 function disparar(){
 	var tiempoActual = new Date().valueOf();
-	if(jugador.tiempoUltimoDisparo === null || (tiempoActual - jugador.tiempoUltimoDisparo) > (1000 / jugador.frecuenciaDisparo)){
-		var nuevoDisparo = new disparo(jugador.x, jugador.y);
-		jugador.disparos.push(nuevoDisparo);
+	if(jugador.tiempoUltimoDisparo === null || (tiempoActual - jugador.tiempoUltimoDisparo) > (jugador.frecuenciaDisparo)){
+		var nuevoDisparo = new disparo(jugador.x, jugador.y); //We create a new bullet object 
+		jugador.disparos.push(nuevoDisparo); //We add the bullet to the array
 		teclado.espacio = false;
-		jugador.tiempoUltimoDisparo = tiempoActual;
+		jugador.tiempoUltimoDisparo = tiempoActual; //We update the time
 	}
 }
