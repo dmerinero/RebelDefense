@@ -7,6 +7,14 @@ ctx.canvas.height = window.innerHeight;
 
 var colors = ["green", "yellow", "pink", "white", "blue", "orange"];
 
+//CHANGE THIS ("levelStage") WHEN YOU CHANGE THE STAGE AS DEATH OR PAUSE
+//Use:
+// Introduction 8==D Stage 0
+// Main game 8==D Stage 1
+// Pause game 8==D Stage 2
+// Dead 8==D Stage 3
+var levelStage = 0; 
+
 //FUNCIONES
 inicializar();
 
@@ -14,24 +22,38 @@ function inicializar() {
 	//INICIALIZAR JUGADOR
 	setJugador();
 
-	//BUCLE PRINCIPAL
-	setInterval(bucle, 1000/60);
+	menuInicial(); //Inside of this one we execute the game
+}
+
+function menuInicial() {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font="40px Arial";
+    ctx.fillStyle = '#000000';
+    ctx.textBaseline="center"; 
+    ctx.textAlign="center"; 
+    ctx.fillText("RebelDefense", canvas.width / 2, canvas.height/2 - 40); 
+    ctx.font="16px Arial";
+
+	ctx.fillText("Press 'S' to Start and 'P' to Pause.", canvas.width / 2, canvas.height/2); 
 }
 
 function bucle() {
-	//LIMPIAR PANTALLA
-	ctx.fillStyle = "black";
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	
-	//Moving the player
-	actualizarJugador();
-	//Drawing the player
-	preShake(); //It will only shake when we call "startShake()"
-	dibujarJugador();
-	postShake();
+	if(levelStage==1){
+		//LIMPIAR PANTALLA
+		ctx.fillStyle = "black";
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		
+		//Moving the player
+		actualizarJugador();
+		//Drawing the player
+		preShake(); //It will only shake when we call "startShake()"
+		dibujarJugador();
+		postShake();
 
 
-	//Create the upper functions for the other objects we create
+		//Create the upper functions for the other objects we create
+	}
 }
 
 

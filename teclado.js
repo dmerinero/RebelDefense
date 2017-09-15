@@ -8,7 +8,9 @@ var teclado = {
 	izquierda: false,
 	izquierda_code: 37,
 	espacio: false,
-	espacio_code: 32
+	espacio_code: 32,
+	tecla_s: 83,
+	tecla_p: 80
 };
 
 function keyDownHandler(e) {
@@ -29,5 +31,18 @@ function keyUpHandler(e) {
 		teclado.izquierda = false;
 	} else if (e.keyCode == teclado.espacio_code) {
 		teclado.espacio = false;
+	}
+	else if(e.keyCode == teclado.tecla_s){
+		//BUCLE PRINCIPAL
+		if(levelStage != 1 && levelStage != 2){ //To only allow to create one main "main" and prevent more executions
+			setInterval(bucle, 1000/60);
+			levelStage = 1; //We set the levelStage into the main one
+		}else if(levelStage==2){ //We were on pause so a game was already existing and there is no need to call it again
+			levelStage = 1;
+		}
+	} else if(e.keyCode == teclado.tecla_p) { //We enter on pause mode
+		if(levelStage == 1){
+			levelStage = 2;
+		}
 	}
 }
