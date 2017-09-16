@@ -66,7 +66,7 @@ function imprimirPausa() {
     ctx.fillText("Pause", canvas.width / 2, canvas.height/2 - 120); 
     ctx.font="16px Arial";
 
-     var bye = document.getElementById("wrap");
+     var bye = document.getElementById("wrap"); //Show the alien when pause is clicked
      bye.style.visibility = 'visible';
 }
 

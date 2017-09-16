@@ -39,7 +39,7 @@ function keyUpHandler(e) {
 			levelStage = 1; //We set the levelStage into the main one
 		}else if(levelStage==2){ //We were on pause so a game was already existing and there is no need to call it again
 			levelStage = 1;
-			var bye = document.getElementById("wrap");
+			var bye = document.getElementById("wrap"); //Show the alien when pause is clicked
      		bye.style.visibility = 'hidden';
 		}
 	} else if(e.keyCode == teclado.tecla_p) { //We enter on pause mode
