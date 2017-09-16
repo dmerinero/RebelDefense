@@ -11,7 +11,7 @@ body, #canvas {
 
 #vader {
 	position: fixed;
-		top: 55%;
-		left: 35%;
-
+	top: 55%;
+	left: 35%;
+	visibility: visible;
 	}

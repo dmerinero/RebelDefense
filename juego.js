@@ -39,6 +39,8 @@ function menuInicial() {
 }
 
 function bucle() {
+  var bye = document.getElementById("vader"); //Show the alien when pause is clicked
+  bye.style.visibility = 'hidden';
 	if(levelStage==1){
 		//LIMPIAR PANTALLA
 		ctx.fillStyle = "black";
