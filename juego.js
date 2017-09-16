@@ -26,16 +26,16 @@ function inicializar() {
 }
 
 function menuInicial() {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.font="40px Arial";
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = "#e3edf0";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font="50px StarWars";
+    ctx.fillStyle = 'black';
     ctx.textBaseline="center"; 
     ctx.textAlign="center"; 
-    ctx.fillText("RebelDefense", canvas.width / 2, canvas.height/2 - 40); 
-    ctx.font="16px Arial";
+    ctx.fillText("Rebel Defense", canvas.width / 2, canvas.height/2 - 80); 
+    ctx.font="24px StarWars";
 
-	ctx.fillText("Press 'S' to Start and 'P' to Pause.", canvas.width / 2, canvas.height/2); 
+	ctx.fillText("Press 'S' to Start and 'P' to Pause.", canvas.width / 2, canvas.height/2 - 30); 
 }
 
 function bucle() {

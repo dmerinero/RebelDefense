@@ -1,0 +1,17 @@
+@font-face {
+    font-family: StarWars;
+    src: url(../fonts/Starjedi.ttf);
+}
+body, #canvas {
+	width:100%; 
+	height:100%; 
+	margin:0px;
+	font-family: StarWars;
+}
+
+#vader {
+	position: fixed;
+		top: 55%;
+		left: 35%;
+
+	}
