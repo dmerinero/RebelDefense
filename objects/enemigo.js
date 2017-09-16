@@ -35,9 +35,9 @@ function enemigosController(){
 	this.setEnemigos = function() {
 		var posX = 30;
 		var posY = 30;
-		for(var j=0; j<4; j++){
+		for(var j=0; j<4; j++){ //Change here to create more or less enemies rows
 			enemigos[j]= [];
-			for(var i=0; i<10; i++){
+			for(var i=0; i<10; i++){ //Change here to change the weight of the enemies
 				enemigos[j][i] = new enemigo(posX, posY);
 				posX+= enemigos[j][i].ancho+30;
 			}
@@ -61,8 +61,8 @@ function enemigosController(){
 	}
 
 	this.movimientoLateral = function() {
-		for(var j=0; j<4; j++){
-			for(var i=0; i<10; i++){
+		for(var j=0; j<enemigos.length; j++){
+			for(var i=0; i<enemigos[j].length; i++){
 				enemigos[j][i].actualizarEnemigo(direccionDerecha, false);
 				if(enemigos[j][i].x >= canvas.width - 70)
 					changeDir = true;
@@ -74,17 +74,33 @@ function enemigosController(){
 	}
 
 	this.movimientoVertical = function (){
-		for(var j=0; j<4; j++){
-			for(var i=0; i<10; i++){
+		for(var j=0; j<enemigos.length; j++){
+			for(var i=0; i<enemigos[j].length; i++){
 				enemigos[j][i].actualizarEnemigo(direccionDerecha, true);
 			}
 		}
 	}
 
 	this.dibujarEnemigos = function(){
-		for(var j=0; j<4; j++)
-			for(var i=0; i<10; i++)
+		for(var j=0; j<enemigos.length; j++)
+			for(var i=0; i<enemigos[j].length; i++)
 				enemigos[j][i].dibujarEnemigo();
 	}
+
+    this.comprobarColisiones = function(dx, dy, dan, dal) {
+        for(var j=0; j<enemigos.length; j++)
+			for(var i=0; i<enemigos[j].length; i++){
+                if(enemigos[j][i].x < dx + dan && enemigos[j][i].x + enemigos[j][i].ancho > dx &&
+                    enemigos[j][i].y < dy + dal && enemigos[j][i].y + enemigos[j][i].alto > dy){
+                    //The two objects are touching
+                    //delete enemigos[j][i];
+                    enemigos[j].splice(i, 1);
+                    return true;
+                }
+
+            }
+        return false;
+			
+    }
 
 }

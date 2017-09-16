@@ -21,6 +21,7 @@ function setJugador(){
 	jugador.y = canvas.height - jugador.alto - jugador.margenLateral;
 	jugador.limite_izquierda = jugador.margenLateral;
 	jugador.limite_derecha = canvas.width - jugador.ancho - jugador.margenLateral;
+    return jugador;
 }
 
 function actualizarJugador(){

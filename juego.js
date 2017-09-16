@@ -14,6 +14,7 @@ var colors = ["green", "yellow", "pink", "white", "blue", "orange"];
 // Pause game 8==D Stage 2
 // Dead 8==D Stage 3
 var levelStage = 0; 
+var jugador;
 var enemigos = new enemigosController();
 
 //FUNCIONES
@@ -23,9 +24,9 @@ function inicializar() {
   menuInicial(); //Inside of this one we execute the game
 
 	//INICIALIZAR JUGADOR
-	setJugador();
-  //Enemies init
-  enemigos.setEnemigos();
+    jugador = setJugador();
+    //Enemies init
+    enemigos.setEnemigos();
 }
 
 function menuInicial() {
@@ -51,14 +52,14 @@ function bucle() {
 		
 		//Moving the player
 		actualizarJugador();
-    enemigos.actualizarEnemigos();
+        enemigos.actualizarEnemigos();
 		//Drawing the player
-		preShake(); //It will only shake when we call "startShake()"
-		dibujarJugador();
-    enemigos.dibujarEnemigos();
-		postShake();
-
-
+        preShake(); //It will only shake when we call "startShake()"
+        dibujarJugador();
+        enemigos.dibujarEnemigos();
+        postShake();
+        
+        comprobarColisiones();
 		//Create the upper functions for the other objects we create
 	}
 }
@@ -77,6 +78,16 @@ function imprimirPausa() {
      bye.style.visibility = 'visible';
 }
 
+function comprobarColisiones(){
+    for(var i in jugador.disparos){
+        var disparo = jugador.disparos[i];
+        var colision = enemigos.comprobarColisiones(disparo.x, disparo.y, disparo.ancho, disparo.alto);
+        if(colision == true){
+ 			delete jugador.disparos[i];
+			jugador.disparos.splice(i, 1);
+        }
+    }
+}
 
 //Functions from google to shake the screen when a shoot is done
 var shakeDuration = 200;
