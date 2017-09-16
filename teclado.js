@@ -39,10 +39,13 @@ function keyUpHandler(e) {
 			levelStage = 1; //We set the levelStage into the main one
 		}else if(levelStage==2){ //We were on pause so a game was already existing and there is no need to call it again
 			levelStage = 1;
+			var bye = document.getElementById("wrap");
+     		bye.style.visibility = 'hidden';
 		}
 	} else if(e.keyCode == teclado.tecla_p) { //We enter on pause mode
 		if(levelStage == 1){
 			levelStage = 2;
+			imprimirPausa();
 		}
 	}
 }

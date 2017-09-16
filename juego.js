@@ -56,6 +56,20 @@ function bucle() {
 	}
 }
 
+function imprimirPausa() {
+	//ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font="40px Arial";
+    ctx.fillStyle = '#ffffff';
+    ctx.textBaseline="center"; 
+    ctx.textAlign="center"; 
+    ctx.fillText("Pause", canvas.width / 2, canvas.height/2 - 120); 
+    ctx.font="16px Arial";
+
+     var bye = document.getElementById("wrap");
+     bye.style.visibility = 'visible';
+}
+
 
 //Functions from google to shake the screen when a shoot is done
 var shakeDuration = 200;
