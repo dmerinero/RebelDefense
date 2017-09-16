@@ -14,15 +14,18 @@ var colors = ["green", "yellow", "pink", "white", "blue", "orange"];
 // Pause game 8==D Stage 2
 // Dead 8==D Stage 3
 var levelStage = 0; 
+var enemigos = new enemigosController();
 
 //FUNCIONES
 inicializar();
 
 function inicializar() {
+  menuInicial(); //Inside of this one we execute the game
+
 	//INICIALIZAR JUGADOR
 	setJugador();
-
-	menuInicial(); //Inside of this one we execute the game
+  //Enemies init
+  enemigos.setEnemigos();
 }
 
 function menuInicial() {
@@ -48,9 +51,11 @@ function bucle() {
 		
 		//Moving the player
 		actualizarJugador();
+    enemigos.actualizarEnemigos();
 		//Drawing the player
 		preShake(); //It will only shake when we call "startShake()"
 		dibujarJugador();
+    enemigos.dibujarEnemigos();
 		postShake();
 
 
