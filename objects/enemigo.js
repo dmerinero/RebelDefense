@@ -8,11 +8,14 @@ function enemigo(x, y) {
 	this.velocidad = 3;
 
 	//This function moves the enemy
-	this.actualizarEnemigo = function(direccionDerecha) {
-		if(direccionDerecha)
-			this.x += this.velocidad;
+	this.actualizarEnemigo = function(direccionDerecha, vertical) {
+		if(vertical)
+			this.y += this.velocidad-1.5;
 		else
-			this.x -= this.velocidad;
+			if(direccionDerecha)
+				this.x += this.velocidad;
+			else
+				this.x -= this.velocidad;
 	};
 
 	//This function draws the enemy
@@ -26,7 +29,8 @@ function enemigosController(){
 	var enemigos = [];
 	var direccionDerecha = true; //This is the side direction
 	var changeDir = false; //When true, it will change the direction
-	var direccionUp = false; //This is the vertical movement
+	var tiempoVertical = 500; //This is the vertical movement time
+	var ultimoCambio = null;
 
 	this.setEnemigos = function() {
 		var posX = 30;
@@ -42,8 +46,9 @@ function enemigosController(){
 		}
 	}
 	this.actualizarEnemigos = function(){
-		if(direccionUp)
-			console.log("Movimiento Vertical");
+		var tiempoActual = new Date().valueOf();
+		if(( tiempoActual - ultimoCambio) < tiempoVertical)
+			this.movimientoVertical();
 		else
 			this.movimientoLateral(); //Movement to the sides
 
@@ -51,18 +56,27 @@ function enemigosController(){
 		if(changeDir == true){
 			direccionDerecha = !direccionDerecha;
 			changeDir = false;
+			ultimoCambio = new Date().valueOf();
 		}
 	}
 
 	this.movimientoLateral = function() {
 		for(var j=0; j<4; j++){
 			for(var i=0; i<10; i++){
-				enemigos[j][i].actualizarEnemigo(direccionDerecha);
+				enemigos[j][i].actualizarEnemigo(direccionDerecha, false);
 				if(enemigos[j][i].x >= canvas.width - 70)
 					changeDir = true;
 				else if(enemigos[j][i].x <= 20)
 					changeDir = true;
 				
+			}
+		}
+	}
+
+	this.movimientoVertical = function (){
+		for(var j=0; j<4; j++){
+			for(var i=0; i<10; i++){
+				enemigos[j][i].actualizarEnemigo(direccionDerecha, true);
 			}
 		}
 	}
