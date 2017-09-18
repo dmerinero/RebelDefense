@@ -16,6 +16,7 @@ var colors = ["green", "yellow", "pink", "white", "blue", "orange"];
 var levelStage = 0; 
 var jugador;
 var enemigos = new enemigosController();
+var scoreManager = new scoreManager();
 
 //FUNCIONES
 inicializar();
@@ -50,6 +51,7 @@ function bucle() {
 		ctx.fillStyle = "black";
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 		
+    scoreManager.dibujarScore();
 		//Moving the player
 		actualizarJugador();
         enemigos.actualizarEnemigos();
