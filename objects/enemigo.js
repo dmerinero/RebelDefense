@@ -1,3 +1,5 @@
+var puntos = 200; //Puntos que da cada enemigo al morir
+
 function enemigo(x, y) {
 	this.x = x;
 	this.y = y;
@@ -95,6 +97,7 @@ function enemigosController(){
                     //The two objects are touching
                     //delete enemigos[j][i];
                     enemigos[j].splice(i, 1);
+                    scoreManager.addScore(puntos);
                     return true;
                 }
 
