@@ -1,85 +1,120 @@
 //OBTENEMOS EL CANVAS Y EL CONTEXT (USADO PARA DIBUJAR)
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
+//Setting the scale to the actual screen
+ctx.canvas.width  = window.innerWidth;
+ctx.canvas.height = window.innerHeight;
 
-//OBJETOS
-var jugador = {
-	x: 0,
-	y: canvas.height - 50 - 20,
-	ancho: 50,
-	alto: 50,
+var colors = ["green", "yellow", "pink", "white", "blue", "orange"];
 
-	velocidad: 10,
-
-	margenLateral: 20,
-	limite_izquierda: 20,
-	limite_derecha: 0
-};
-
-//TECLADO
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-
-var teclado = {
-	derecha: false,
-	derecha_code: 39,
-	izquierda: false,
-	izquierda_code: 37
-};
-
-function keyDownHandler(e) {
-	if (e.keyCode == teclado.derecha_code) {
-		teclado.derecha = true;
-	} else if (e.keyCode == teclado.izquierda_code) {
-		teclado.izquierda = true;
-	}
-}
-
-function keyUpHandler(e) {
-	if (e.keyCode == teclado.derecha_code) {
-		teclado.derecha = false;
-	} else if (e.keyCode == teclado.izquierda_code) {
-		teclado.izquierda = false;
-	}
-}
+//CHANGE THIS ("levelStage") WHEN YOU CHANGE THE STAGE AS DEATH OR PAUSE
+//Use:
+// Introduction 8==D Stage 0
+// Main game 8==D Stage 1
+// Pause game 8==D Stage 2
+// Dead 8==D Stage 3
+var levelStage = 0; 
+var jugador;
+var enemigos = new enemigosController();
+var scoreManager = new scoreManager();
 
 //FUNCIONES
 inicializar();
 
 function inicializar() {
+  menuInicial(); //Inside of this one we execute the game
+
 	//INICIALIZAR JUGADOR
-	jugador.x = (canvas.width - 50)/2;
-	jugador.y = canvas.height - jugador.alto - jugador.margenLateral;
-	jugador.limite_izquierda = jugador.margenLateral;
-	jugador.limite_derecha = canvas.width - jugador.ancho - jugador.margenLateral;
-	//BUCLE PRINCIPAL
-	setInterval(bucle, 1000/60);
+    jugador = setJugador();
+    //Enemies init
+    enemigos.setEnemigos();
+}
+
+function menuInicial() {
+    ctx.fillStyle = "#e3edf0";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font="50px StarWars";
+    ctx.fillStyle = 'black';
+    ctx.textBaseline="center"; 
+    ctx.textAlign="center"; 
+    ctx.fillText("Rebel Defense", canvas.width / 2, canvas.height/2 - 80); 
+    ctx.font="24px StarWars";
+
+	ctx.fillText("Press 'S' to Start and 'P' to Pause.", canvas.width / 2, canvas.height/2 - 30); 
 }
 
 function bucle() {
-	//LIMPIAR PANTALLA
-	ctx.fillStyle = "black";
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	//MOVER AL JUGADOR
-	if (teclado.derecha) {
-		jugador.x += jugador.velocidad;
-	} else if (teclado.izquierda) {
-		jugador.x -= jugador.velocidad;
+  var bye = document.getElementById("vader"); //Show the alien when pause is clicked
+  bye.style.visibility = 'hidden';
+	if(levelStage==1){
+		//LIMPIAR PANTALLA
+		ctx.fillStyle = "black";
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		
+    scoreManager.dibujarScore();
+		//Moving the player
+		actualizarJugador();
+        enemigos.actualizarEnemigos();
+		//Drawing the player
+        preShake(); //It will only shake when we call "startShake()"
+        dibujarJugador();
+        enemigos.dibujarEnemigos();
+        postShake();
+        
+        comprobarColisiones();
+		//Create the upper functions for the other objects we create
 	}
-	//EVITAR QUE JUGADOR SALGA DE LA PANTALLA
-	var limite_izquierda = jugador.margenLateral;
-
-	if (jugador.x < jugador.limite_izquierda) {
-		jugador.x = jugador.limite_izquierda;
-	} else if (jugador.x > jugador.limite_derecha) {
-		jugador.x = jugador.limite_derecha;
-	}
-	//DIBUJAR JUGADOR
-	ctx.fillStyle = "red";
-	ctx.fillRect(jugador.x, jugador.y, jugador.ancho, jugador.alto);
 }
 
-/*
-Yo creo que lo suyo sería crear dos funciones: actualizarJugador y dibujarJugador
-Asi lo podriamos organizar mejor (y cuando creemos más objetos crear otras 2 funciones para ese objeto)
-*/
+function imprimirPausa() {
+	//ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font="40px Arial";
+    ctx.fillStyle = '#ffffff';
+    ctx.textBaseline="center"; 
+    ctx.textAlign="center"; 
+    ctx.fillText("Pause", canvas.width / 2, canvas.height/2 - 120); 
+    ctx.font="16px Arial";
+
+     var bye = document.getElementById("wrap"); //Show the alien when pause is clicked
+     bye.style.visibility = 'visible';
+}
+
+function comprobarColisiones(){
+    for(var i in jugador.disparos){
+        var disparo = jugador.disparos[i];
+        var colision = enemigos.comprobarColisiones(disparo.x, disparo.y, disparo.ancho, disparo.alto);
+        if(colision == true){
+ 			delete jugador.disparos[i];
+			jugador.disparos.splice(i, 1);
+        }
+    }
+}
+
+//Functions from google to shake the screen when a shoot is done
+var shakeDuration = 200;
+var shakeStartTime = -1;
+
+function preShake() {
+  if (shakeStartTime ==-1) return;
+  var dt = Date.now()-shakeStartTime;
+  if (dt>shakeDuration) {
+      shakeStartTime = -1; 
+      return;
+  }
+  var easingCoef = dt / shakeDuration;
+  var easing = Math.pow(easingCoef-1,3) +1;
+  ctx.save();  
+  var dx = easing*(Math.cos(dt*0.1 ) + Math.cos( dt *0.3115))*2;
+  var dy = easing*(Math.sin(dt*0.05) + Math.sin(dt*0.057113))*2;
+  ctx.translate(dx, dy);  
+}
+
+function postShake() {
+  if (shakeStartTime ==-1) return;
+  ctx.restore();
+}
+
+function startShake() {
+   shakeStartTime=Date.now();
+}

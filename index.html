@@ -1,9 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
 	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+
+		<link rel="stylesheet" type="text/css" href="css/alien.css">
+		<link rel="stylesheet" type="text/css" href="css/juego.css">
 	</head>
-	<body>
-		<canvas id="canvas" width="480" height="320"></canvas>
+        <canvas id="canvas"></canvas>
+
+        <img src="img/vader.gif" id="vader"/>
+
+		<!-- This alien will appear when pause is clicked -->
+		<!-- Erase if you want to change it for other thing -->
+       	<div id="wrap" style="visibility: hidden;">
+		  <div id="alien">
+		    <div class="body">
+		      <div class="eyes left"></div>
+		      <div class="eyes right"></div>
+		      <div class="mouse"></div>
+		    </div>
+		    <div class="arms left"></div>
+		    <div class="arms right"></div>
+		    <div class="legs left"></div>
+		    <div class="legs right"></div>
+		    <div class="halo-set">
+		      <div class="halo"></div>
+		      <div class="halo"></div>
+		      <div class="halo"></div>
+		      <div class="halo"></div>
+		      <div class="halo"></div>
+		    </div>
+		  </div>
+		</div>
+
+        <!-- Calling the objects to use -->
+        <script src="objects/teclado.js"></script>
+        <script src="objects/sound.js"></script>
+        <script src="objects/disparo.js"></script>
+        <script src="objects/enemigo.js"></script>
+        <script src="objects/jugador.js"></script>
+        <script src="objects/score.js"></script>
+
+		<!-- Calling the main game -->
 		<script src="juego.js"></script>
+		
 	</body>
 </html>
