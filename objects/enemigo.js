@@ -98,6 +98,7 @@ function enemigosController(){
                     //The two objects are touching
                     //delete enemigos[j][i];
                     enemigos[j].splice(i, 1);
+                    startShake();
                     scoreManager.addScore(puntos);
                     return true;
                 }

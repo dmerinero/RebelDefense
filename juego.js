@@ -50,6 +50,7 @@ function bucle() {
 		//LIMPIAR PANTALLA
 		ctx.fillStyle = "black";
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font="24px StarWars";
 		
     scoreManager.dibujarScore();
 		//Moving the player
