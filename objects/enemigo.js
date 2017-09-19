@@ -1,17 +1,29 @@
 var puntos = 200; //Puntos que da cada enemigo al morir
 var img = document.getElementById("trooper");
 
+var anchoEnemigo = 40;
+var altoEnemigo = 40;
+
 function enemigo(x, y) {
 	this.x = x;
 	this.y = y;
-	this.ancho = 40;
-	this.alto = 40;
+	this.ancho = anchoEnemigo;
+	this.alto = altoEnemigo;
+
+	this.alive = true;
 
 	this.color = colors[Math.floor(Math.random() * 7)]; //Get a random color
 	this.velocidad = 3;
 
+	this.disparo = new disparoEnemigo();
+	this.shootTime = -10;
+
 	//This function moves the enemy
 	this.actualizarEnemigo = function(direccionDerecha, vertical) {
+		//Actualizar disparo
+		this.disparo.actualizar();
+
+		if (!this.alive) return;
 		if(vertical)
 			this.y += this.velocidad-1.5;
 		else
@@ -21,11 +33,69 @@ function enemigo(x, y) {
 				this.x -= this.velocidad;
 	};
 
-	//This function draws the enemy
+	//This function draws the enemy and the shot
 	this.dibujarEnemigo = function() {
-			ctx.drawImage(img, this.x, this.y, 50, 50);
+		if (this.alive) ctx.drawImage(img, this.x, this.y, 50, 50);
+		this.disparo.dibujar();
 	};
 
+	this.actualizarDisparo = function() {
+		if (this.disparo.alive) return; //Only one shot alive
+		if (this.shootTime <= 0) {
+			this.reloadShot();
+		}
+
+
+		if (this.shootTime < new Date().getTime()) {
+			console.log("shot")
+			this.disparo.disparar(this.x, this.y);
+		}
+	};
+
+	this.reloadShot = function() {
+		this.shootTime = new Date().getTime() + Math.floor(Math.random() * 6)*1000 + 1000;
+	};
+}
+
+function disparoEnemigo() {
+	this.x = 0 + anchoEnemigo/2;
+	this.y = 0 + altoEnemigo + 5;
+
+	this.ancho= 10;
+	this.alto= 10;
+
+	this.alive = false;
+	this.velocidad = 5;
+
+	this.disparar = function(x, y) {
+		this.alive = true;
+		this.x = x + anchoEnemigo/2;
+		this.y = y + altoEnemigo;
+	};
+
+	this.actualizar = function() {
+		if (!this.alive) return;
+		this.y += this.velocidad; //Move
+		if (this.y > canvas.width) {
+			this.alive = false;
+		}
+		this.comprobarColision();
+	};
+
+	this.dibujar = function() {
+		//if (this.alive) {
+			ctx.fillStyle = "red";
+			ctx.fillRect(this.x, this.y, this.ancho, this.alto)
+		//}
+	};
+
+	this.comprobarColision = function() {
+		if (jugador.x < this.x + this.ancho && jugador.x + jugador.ancho > this.x &&
+                    jugador.y < this.y + this.alto && jugador.y + jugador.alto > this.y) {
+			//Player was hit --> GAME OVER
+			levelStage = 3;
+		}
+	};
 }
 
 function enemigosController(){
@@ -61,6 +131,17 @@ function enemigosController(){
 			changeDir = false;
 			ultimoCambio = new Date().valueOf();
 		}
+
+		//Enemies shots
+		for (var i = 0; i<10; i++) {
+			var j = enemigos.length-1;
+			while (!enemigos[j][i].alive) {
+				j--;
+				if (j <= 0) break;
+			}
+			enemigos[j][i].actualizarDisparo();
+			
+		}
 	}
 
 	this.movimientoLateral = function() {
@@ -93,11 +174,13 @@ function enemigosController(){
     this.comprobarColisiones = function(dx, dy, dan, dal) {
         for(var j=0; j<enemigos.length; j++)
 			for(var i=0; i<enemigos[j].length; i++){
+				if (!enemigos[j][i].alive) continue;
                 if(enemigos[j][i].x < dx + dan && enemigos[j][i].x + enemigos[j][i].ancho > dx &&
                     enemigos[j][i].y < dy + dal && enemigos[j][i].y + enemigos[j][i].alto > dy){
                     //The two objects are touching
                     //delete enemigos[j][i];
-                    enemigos[j].splice(i, 1);
+                    //enemigos[j].splice(i, 1);
+                    enemigos[j][i].alive = false;
                     startShake();
                     scoreManager.addScore(puntos);
                     return true;

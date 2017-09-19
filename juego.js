@@ -13,7 +13,7 @@ var colors = ["green", "yellow", "pink", "white", "blue", "orange"];
 // Main game 8==D Stage 1
 // Pause game 8==D Stage 2
 // Dead 8==D Stage 3
-var levelStage = 0; 
+var levelStage = 3; 
 var jugador;
 var enemigos = new enemigosController();
 var scoreManager = new scoreManager();
@@ -50,8 +50,7 @@ function bucle() {
 		//LIMPIAR PANTALLA
 		ctx.fillStyle = "black";
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font="24px StarWars";
-		
+    		
     scoreManager.dibujarScore();
 		//Moving the player
 		actualizarJugador();
@@ -64,7 +63,15 @@ function bucle() {
         
         comprobarColisiones();
 		//Create the upper functions for the other objects we create
-	}
+	} else if (levelStage == 3) { //GAME OVER
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(canvas.width/2 - 250, canvas.height/2 - 50, 250*2, 30*2);
+    ctx.fillStyle = "black";
+    ctx.fillRect(canvas.width/2 - 200, canvas.height/2 - 50, 200*2, 30*2);
+    ctx.fillStyle = "white";
+    ctx.font="50px StarWars";
+    ctx.fillText("G A M E  0 ` E R", canvas.width/2, canvas.height/2);
+  }
 }
 
 function imprimirPausa() {
