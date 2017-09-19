@@ -5,7 +5,12 @@ var ctx = canvas.getContext("2d");
 ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
+var mainInterval;
+
 var colors = ["green", "yellow", "pink", "white", "blue", "orange"];
+
+var aumentoGameSpeed = 0.25;
+var gameSpeed = 1.0;
 
 //CHANGE THIS ("levelStage") WHEN YOU CHANGE THE STAGE AS DEATH OR PAUSE
 //Use:
@@ -13,9 +18,10 @@ var colors = ["green", "yellow", "pink", "white", "blue", "orange"];
 // Main game 8==D Stage 1
 // Pause game 8==D Stage 2
 // Dead 8==D Stage 3
-var levelStage = 3; 
+// Next Level --> Stage 4
+var levelStage = 0; 
 var jugador;
-var enemigos = new enemigosController();
+var enemigos;
 var scoreManager = new scoreManager();
 
 //FUNCIONES
@@ -23,11 +29,12 @@ inicializar();
 
 function inicializar() {
   menuInicial(); //Inside of this one we execute the game
-
+  enemigos = new enemigosController();
 	//INICIALIZAR JUGADOR
     jugador = setJugador();
     //Enemies init
     enemigos.setEnemigos();
+    jugador.disparos = [];
 }
 
 function menuInicial() {
@@ -42,6 +49,9 @@ function menuInicial() {
 
 	ctx.fillText("Press 'S' to Start and 'P' to Pause.", canvas.width / 2, canvas.height/2 - 30); 
 }
+
+var timeNextStage = 0;
+var level = 1;
 
 function bucle() {
   var bye = document.getElementById("vader"); //Show the alien when pause is clicked
@@ -58,19 +68,45 @@ function bucle() {
 		//Drawing the player
         preShake(); //It will only shake when we call "startShake()"
         dibujarJugador();
+        comprobarColisiones();
         enemigos.dibujarEnemigos();
         postShake();
         
-        comprobarColisiones();
+        
 		//Create the upper functions for the other objects we create
+    //Check if all enemies have died
+    if (enemigosElimidos >= enemigos.xEnemigos*enemigos.yEnemigos) {
+      levelStage = 4;
+      enemigosElimidos = 0;
+    }
 	} else if (levelStage == 3) { //GAME OVER
     ctx.strokeStyle = "white";
     ctx.strokeRect(canvas.width/2 - 250, canvas.height/2 - 50, 250*2, 30*2);
     ctx.fillStyle = "black";
-    ctx.fillRect(canvas.width/2 - 200, canvas.height/2 - 50, 200*2, 30*2);
+    ctx.fillRect(canvas.width/2 - 250, canvas.height/2 - 50, 250*2, 30*2);
     ctx.fillStyle = "white";
     ctx.font="50px StarWars";
     ctx.fillText("G A M E  0 ` E R", canvas.width/2, canvas.height/2);
+  } else if (levelStage == 4) { //NEXT LEVEL
+    if (timeNextStage == 0) {
+      level++;
+      gameSpeed += aumentoGameSpeed;
+      timeNextStage = new Date().getTime();
+    }
+
+    if (new Date().getTime() > timeNextStage + 2000) {
+      levelStage = 1;
+      inicializar();
+      timeNextStage = 0;
+    } else {
+      ctx.strokeStyle = "white";
+    ctx.strokeRect(canvas.width/2 - 420, canvas.height/2 - 50, 420*2, 30*2);
+    ctx.fillStyle = "black";
+    ctx.fillRect(canvas.width/2 - 420, canvas.height/2 - 50, 420*2, 30*2);
+    ctx.fillStyle = "white";
+    ctx.font="50px StarWars";
+    ctx.fillText("S T A G E  C 0 M P L E T E D", canvas.width/2, canvas.height/2);
+    }
   }
 }
 

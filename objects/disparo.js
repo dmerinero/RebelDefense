@@ -10,7 +10,7 @@ function disparo(x, y) {
 
 	//This function moves the bullet
 	this.actualizarDisparo = function() {
-		this.y -= this.velocidad;
+		this.y -= this.velocidad*gameSpeed;
 	};
 
 	//This function draws the bullet

@@ -4,6 +4,8 @@ var img = document.getElementById("trooper");
 var anchoEnemigo = 40;
 var altoEnemigo = 40;
 
+var enemigosElimidos = 0;
+
 function enemigo(x, y) {
 	this.x = x;
 	this.y = y;
@@ -25,12 +27,12 @@ function enemigo(x, y) {
 
 		if (!this.alive) return;
 		if(vertical)
-			this.y += this.velocidad-1.5;
+			this.y += (this.velocidad-1.5)*gameSpeed;
 		else
 			if(direccionDerecha)
-				this.x += this.velocidad;
+				this.x += this.velocidad*gameSpeed;
 			else
-				this.x -= this.velocidad;
+				this.x -= this.velocidad*gameSpeed;
 	};
 
 	//This function draws the enemy and the shot
@@ -47,13 +49,12 @@ function enemigo(x, y) {
 
 
 		if (this.shootTime < new Date().getTime()) {
-			console.log("shot")
 			this.disparo.disparar(this.x, this.y);
 		}
 	};
 
 	this.reloadShot = function() {
-		this.shootTime = new Date().getTime() + Math.floor(Math.random() * 6)*1000 + 1000;
+		this.shootTime = new Date().getTime() + (Math.floor(Math.random() * 6)*1000 + 1000)/gameSpeed;
 	};
 }
 
@@ -75,7 +76,7 @@ function disparoEnemigo() {
 
 	this.actualizar = function() {
 		if (!this.alive) return;
-		this.y += this.velocidad; //Move
+		this.y += this.velocidad*gameSpeed; //Move
 		if (this.y > canvas.width) {
 			this.alive = false;
 		}
@@ -83,10 +84,10 @@ function disparoEnemigo() {
 	};
 
 	this.dibujar = function() {
-		//if (this.alive) {
+		if (this.alive) {
 			ctx.fillStyle = "red";
 			ctx.fillRect(this.x, this.y, this.ancho, this.alto)
-		//}
+		}
 	};
 
 	this.comprobarColision = function() {
@@ -105,12 +106,15 @@ function enemigosController(){
 	var tiempoVertical = 500; //This is the vertical movement time
 	var ultimoCambio = null;
 
+	this.xEnemigos = 10; //Change here to change the weight of the enemies
+	this.yEnemigos = 4; //Change here to create more or less enemies rows
+
 	this.setEnemigos = function() {
 		var posX = 30;
 		var posY = 30;
-		for(var j=0; j<4; j++){ //Change here to create more or less enemies rows
+		for(var j=0; j<this.yEnemigos; j++){ 
 			enemigos[j]= [];
-			for(var i=0; i<10; i++){ //Change here to change the weight of the enemies
+			for(var i=0; i<this.xEnemigos; i++){
 				enemigos[j][i] = new enemigo(posX, posY);
 				posX+= enemigos[j][i].ancho+30;
 			}
@@ -133,12 +137,12 @@ function enemigosController(){
 		}
 
 		//Enemies shots
-		for (var i = 0; i<10; i++) {
+		for (var i = 0; i<this.xEnemigos; i++) {
 			var j = enemigos.length-1;
-			while (!enemigos[j][i].alive) {
+			while (!enemigos[j][i].alive && j > 0) {
 				j--;
-				if (j <= 0) break;
 			}
+			if (!enemigos[j][i].alive) continue;
 			enemigos[j][i].actualizarDisparo();
 			
 		}
@@ -183,6 +187,7 @@ function enemigosController(){
                     enemigos[j][i].alive = false;
                     startShake();
                     scoreManager.addScore(puntos);
+                    enemigosElimidos++;
                     return true;
                 }
 
