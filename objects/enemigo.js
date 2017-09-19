@@ -25,6 +25,8 @@ function enemigo(x, y) {
 		//Actualizar disparo
 		this.disparo.actualizar();
 
+		this.comprobarColision();
+
 		if (!this.alive) return;
 		if(vertical)
 			this.y += (this.velocidad-1.5)*gameSpeed;
@@ -42,20 +44,29 @@ function enemigo(x, y) {
 	};
 
 	this.actualizarDisparo = function() {
-		if (this.disparo.alive) return; //Only one shot alive
+		
 		if (this.shootTime <= 0) {
 			this.reloadShot();
 		}
 
-
+		if (this.disparo.alive) return; //Only one shot alive
 		if (this.shootTime < new Date().getTime()) {
 			this.disparo.disparar(this.x, this.y);
+			this.reloadShot();
 		}
 	};
 
 	this.reloadShot = function() {
 		this.shootTime = new Date().getTime() + (Math.floor(Math.random() * 6)*1000 + 1000)/gameSpeed;
 	};
+
+	this.comprobarColision = function() {
+		if (jugador.x < this.x + this.ancho && jugador.x + jugador.ancho > this.x &&
+                    jugador.y < this.y + this.alto && jugador.y + jugador.alto > this.y) {
+			//Player was hit --> GAME OVER
+			levelStage = 3;
+		}
+	}
 }
 
 function disparoEnemigo() {
