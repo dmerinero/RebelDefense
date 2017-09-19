@@ -5,6 +5,8 @@ function enemigo(x, y) {
 	this.y = y;
 	this.ancho = 40;
 	this.alto = 40;
+	this.img = new Image();//document.createElement('IMG');
+	this.img.width = 40
 
 	this.color = colors[Math.floor(Math.random() * 7)]; //Get a random color
 	this.velocidad = 3;
@@ -23,8 +25,13 @@ function enemigo(x, y) {
 	//This function draws the enemy
 	this.dibujarEnemigo = function() {
 		ctx.fillStyle = this.color;
+		this.img.onload = function () {
+			ctx.drawImage(this.img, this.x, this.y);
+		}
+
 		ctx.fillRect(this.x, this.y, this.ancho, this.alto);
-	};
+		
+	};//this.img.src = 'C:\Users\David\Desktop\Jueguecillo para la presentación de Core Sep-2017\img\stormtrooper.png';
 };
 
 function enemigosController(){
