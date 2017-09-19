@@ -10,6 +10,9 @@ var jugador = {
 	limite_izquierda: 20,
 	limite_derecha: 0,
 
+    //Image
+    img: document.getElementById("xWing"),
+
 	//bullet variables
 	tiempoUltimoDisparo: null,
 	frecuenciaDisparo: 250,
@@ -45,8 +48,9 @@ function actualizarJugador(){
 }
 function dibujarJugador(){
 	//DIBUJAR JUGADOR
-	ctx.fillStyle = "red";
-	ctx.fillRect(jugador.x, jugador.y, jugador.ancho, jugador.alto);
+	//ctx.fillStyle = "red";
+	//ctx.fillRect(jugador.x, jugador.y, jugador.ancho, jugador.alto);
+    ctx.drawImage(jugador.img, jugador.x, jugador.y, jugador.ancho, jugador.alto);
 
 	//Update all the bullets we have shot
 	for(var j=0; j<jugador.disparos.length; j++){
